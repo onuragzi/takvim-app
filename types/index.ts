@@ -11,7 +11,8 @@ export interface CalendarEvent {
   endTime?: string; // "HH:MM"
   colorLabel: EventColor;
   reminder: boolean;
-  reminderSent: boolean;
+  reminderSent: boolean;      // 24 saat önce gönderildi mi
+  reminderWeekSent: boolean;  // 1 hafta önce gönderildi mi
   recurrence: RecurrenceType;
   recurrenceEndDate?: string; // "YYYY-MM-DD"
   audioId?: string;

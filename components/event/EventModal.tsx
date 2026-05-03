@@ -13,7 +13,7 @@ interface Props {
   defaultDate?: string;
   defaultHour?: number;
   onClose: () => void;
-  onSave: (data: Omit<CalendarEvent, "id" | "createdAt" | "updatedAt" | "reminderSent">, audioBlob?: Blob) => void;
+  onSave: (data: Omit<CalendarEvent, "id" | "createdAt" | "updatedAt" | "reminderSent" | "reminderWeekSent">, audioBlob?: Blob) => void;
   onDelete?: (id: string) => void;
 }
 

@@ -60,7 +60,7 @@ export default function HomePage() {
   }, []);
 
   const handleSave = useCallback(async (
-    data: Omit<CalendarEvent, "id" | "createdAt" | "updatedAt" | "reminderSent">,
+    data: Omit<CalendarEvent, "id" | "createdAt" | "updatedAt" | "reminderSent" | "reminderWeekSent">,
     audioBlob?: Blob
   ) => {
     let audioId: string | undefined = editingEvent?.audioId;
@@ -83,7 +83,7 @@ export default function HomePage() {
     if (editingEvent) {
       editEvent(editingEvent.id, { ...data, audioId });
     } else {
-      addEvent({ ...data, audioId, reminderSent: false });
+      addEvent({ ...data, audioId, reminderSent: false, reminderWeekSent: false });
     }
 
     closeModal();

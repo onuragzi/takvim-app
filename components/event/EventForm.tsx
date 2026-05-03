@@ -6,14 +6,14 @@ import { COLOR_OPTIONS, RECURRENCE_OPTIONS } from "@/lib/constants";
 import { toDateStr } from "@/lib/date-utils";
 import VoiceRecorder from "./VoiceRecorder";
 
-type FormData = Omit<CalendarEvent, "id" | "createdAt" | "updatedAt" | "reminderSent">;
+type FormData = Omit<CalendarEvent, "id" | "createdAt" | "updatedAt" | "reminderSent" | "reminderWeekSent">;
 
 interface Props {
   initial?: CalendarEvent;
   defaultDate?: string;
   defaultHour?: number;
   existingAudio?: Blob | null;
-  onSubmit: (data: FormData, audioBlob?: Blob) => void;
+  onSubmit: (data: Omit<CalendarEvent, "id" | "createdAt" | "updatedAt" | "reminderSent" | "reminderWeekSent">, audioBlob?: Blob) => void;
   onCancel: () => void;
 }
 
@@ -139,8 +139,8 @@ export default function EventForm({ initial, defaultDate, defaultHour, existingA
         onClick={() => set("reminder", !form.reminder)}
       >
         <div>
-          <div className="text-sm font-semibold" style={{ color: "var(--text)" }}>1 gün önce hatırlat</div>
-          <div className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>Alarm + bildirim</div>
+          <div className="text-sm font-semibold" style={{ color: "var(--text)" }}>Hatırlatma</div>
+          <div className="text-xs mt-0.5" style={{ color: "var(--muted)" }}>1 hafta önce + 24 saat önce alarm</div>
         </div>
         <div
           className="w-12 h-7 rounded-full relative transition-all"
