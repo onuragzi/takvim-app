@@ -2,7 +2,6 @@
 
 import { CalendarEvent } from "@/types";
 import { getWeekDays, toDateStr, isToday, isSameDay } from "@/lib/date-utils";
-import { cn } from "@/lib/utils";
 import EventCard from "./EventCard";
 import { HOURS } from "@/lib/constants";
 
@@ -14,43 +13,57 @@ interface Props {
   onAddClick: (date: Date, hour?: number) => void;
 }
 
+const DAY_LABELS = ["Pt","Sa","Ça","Pe","Cu","Ct","Pa"];
+
 export default function WeekView({ activeDate, getForDate, onDayClick, onEventClick, onAddClick }: Props) {
   const allDays = getWeekDays(activeDate);
-
-  // Telefonda 3 gün göster: aktif gün ortada
   const activeIdx = allDays.findIndex((d) => isSameDay(d, activeDate));
   const centerIdx = Math.max(1, Math.min(activeIdx, allDays.length - 2));
   const days = allDays.slice(centerIdx - 1, centerIdx + 2);
 
-  const dayLabels = ["Pt", "Sa", "Ça", "Pe", "Cu", "Ct", "Pa"];
-
   return (
     <div className="flex flex-col h-full">
-      {/* 3-day header */}
-      <div className="grid grid-cols-4 border-b border-slate-800 bg-slate-900 shrink-0">
+      {/* Day headers */}
+      <div
+        className="grid grid-cols-4 shrink-0"
+        style={{ borderBottom: "1px solid var(--border)", background: "var(--surface)", backdropFilter: "var(--glass)" }}
+      >
         <div className="py-2" />
         {days.map((day, i) => {
           const today = isToday(day);
           const active = isSameDay(day, activeDate);
           const count = getForDate(toDateStr(day)).length;
+          const label = DAY_LABELS[allDays.findIndex((d) => isSameDay(d, day))];
+
           return (
             <button
               key={i}
-              className="py-2 text-center active:bg-slate-800"
               onClick={() => onDayClick(day)}
+              className="py-2 text-center transition-all active:scale-95"
             >
-              <div className="text-xs text-slate-400">{dayLabels[allDays.findIndex((d) => isSameDay(d, day))]}</div>
+              <div className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--muted)" }}>
+                {label}
+              </div>
               <div
-                className={cn(
-                  "mx-auto mt-1 w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold",
-                  today && !active ? "border border-indigo-500 text-indigo-400" : "",
-                  active ? "bg-indigo-600 text-white" : "text-slate-200"
-                )}
+                className="mx-auto mt-1 w-9 h-9 flex items-center justify-center rounded-2xl text-sm font-bold transition-all"
+                style={{
+                  background: active
+                    ? "linear-gradient(135deg, var(--primary), var(--accent))"
+                    : "transparent",
+                  color: active ? "#fff" : today ? "var(--primary)" : "var(--text)",
+                  border: today && !active ? "1.5px solid var(--primary)" : "1.5px solid transparent",
+                  boxShadow: active ? "0 4px 12px rgba(99,102,241,0.4)" : "none",
+                }}
               >
                 {day.getDate()}
               </div>
               {count > 0 && (
-                <div className="mt-0.5 text-xs text-indigo-400">{count}</div>
+                <div
+                  className="mt-1 text-[10px] font-semibold"
+                  style={{ color: active ? "var(--primary)" : "var(--muted)" }}
+                >
+                  {count}
+                </div>
               )}
             </button>
           );
@@ -60,9 +73,16 @@ export default function WeekView({ activeDate, getForDate, onDayClick, onEventCl
       {/* Time grid */}
       <div className="overflow-y-auto flex-1">
         {HOURS.map((hour) => (
-          <div key={hour} className="grid grid-cols-4 border-b border-slate-800 min-h-[56px]">
-            <div className="py-1 pr-2 text-right text-xs text-slate-500 pt-2 leading-none">
-              {String(hour).padStart(2, "0")}:00
+          <div
+            key={hour}
+            className="grid grid-cols-4 min-h-[56px]"
+            style={{ borderBottom: "1px solid var(--border2)" }}
+          >
+            <div
+              className="py-1 pr-2 text-right text-xs pt-2 leading-none"
+              style={{ color: "var(--muted)" }}
+            >
+              {String(hour).padStart(2,"0")}:00
             </div>
             {days.map((day, i) => {
               const dateStr = toDateStr(day);
@@ -72,16 +92,12 @@ export default function WeekView({ activeDate, getForDate, onDayClick, onEventCl
               return (
                 <div
                   key={i}
-                  className="border-l border-slate-800 p-0.5"
+                  className="p-0.5"
+                  style={{ borderLeft: "1px solid var(--border2)" }}
                   onClick={() => onAddClick(day, hour)}
                 >
                   {dayEvents.map((ev) => (
-                    <EventCard
-                      key={ev.id}
-                      event={ev}
-                      compact
-                      onClick={(e) => { onEventClick(e); }}
-                    />
+                    <EventCard key={ev.id} event={ev} compact onClick={(e) => { onEventClick(e); }} />
                   ))}
                 </div>
               );

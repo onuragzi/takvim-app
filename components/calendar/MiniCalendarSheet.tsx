@@ -22,27 +22,38 @@ export default function MiniCalendarSheet({ open, selectedDate, events, onSelect
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-black/60"
+            className="fixed inset-0 z-40"
+            style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
             onClick={onClose}
           />
           <motion.div
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900 rounded-t-2xl p-4 pb-8"
+            transition={{ type: "spring", damping: 28, stiffness: 280 }}
+            className="fixed bottom-0 left-0 right-0 z-50 rounded-t-3xl p-5 pb-8"
+            style={{
+              background: "var(--bg)",
+              backdropFilter: "var(--glass)",
+              borderTop: "1px solid var(--border)",
+              boxShadow: "var(--shadow)",
+            }}
           >
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-white font-semibold">Takvim</h2>
-              <button onClick={onClose} className="p-1.5 rounded-full hover:bg-slate-700 text-slate-400">
-                <X className="w-5 h-5" />
+            <div
+              className="mx-auto w-10 h-1 rounded-full mb-4"
+              style={{ background: "var(--border)" }}
+            />
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-bold text-base" style={{ color: "var(--text)" }}>Takvim</h2>
+              <button
+                onClick={onClose}
+                className="w-8 h-8 flex items-center justify-center rounded-full transition-all active:scale-90"
+                style={{ background: "var(--surface)" }}
+              >
+                <X className="w-4 h-4" style={{ color: "var(--muted)" }} />
               </button>
             </div>
-            <MiniCalendar
-              selectedDate={selectedDate}
-              events={events}
-              onSelect={(d) => { onSelect(d); onClose(); }}
-            />
+            <MiniCalendar selectedDate={selectedDate} events={events} onSelect={(d) => { onSelect(d); onClose(); }} />
           </motion.div>
         </>
       )}

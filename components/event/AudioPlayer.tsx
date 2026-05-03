@@ -3,15 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Play, Pause } from "lucide-react";
 
-interface Props {
-  blob: Blob;
-}
+interface Props { blob: Blob; }
 
 export default function AudioPlayer({ blob }: Props) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [url, setUrl] = useState<string>("");
+  const [url, setUrl] = useState("");
 
   useEffect(() => {
     const u = URL.createObjectURL(blob);
@@ -19,29 +17,21 @@ export default function AudioPlayer({ blob }: Props) {
     return () => URL.revokeObjectURL(u);
   }, [blob]);
 
-  const toggle = () => {
-    if (!audioRef.current) return;
-    if (playing) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
-  };
-
   return (
-    <div className="flex items-center gap-2 bg-slate-800 rounded-lg px-3 py-2">
+    <div className="flex items-center gap-3 flex-1">
       <button
         type="button"
-        onClick={toggle}
-        className="p-1 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white transition-colors"
+        onClick={() => playing ? audioRef.current?.pause() : audioRef.current?.play()}
+        className="w-9 h-9 flex items-center justify-center rounded-full shrink-0 transition-all active:scale-90"
+        style={{ background: "linear-gradient(135deg,var(--primary),var(--accent))", boxShadow: "0 2px 10px rgba(99,102,241,0.4)" }}
       >
-        {playing ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+        {playing ? <Pause className="w-4 h-4 text-white" /> : <Play className="w-4 h-4 text-white" />}
       </button>
 
-      <div className="flex-1 h-1.5 bg-slate-600 rounded-full overflow-hidden">
+      <div className="flex-1 h-2 rounded-full overflow-hidden cursor-pointer" style={{ background: "var(--border)" }}>
         <div
-          className="h-full bg-indigo-500 transition-all"
-          style={{ width: `${progress}%` }}
+          className="h-full rounded-full transition-all"
+          style={{ width: `${progress}%`, background: "linear-gradient(90deg,var(--primary),var(--accent))" }}
         />
       </div>
 

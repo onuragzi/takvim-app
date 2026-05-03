@@ -1,18 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import ThemeProvider from "@/components/layout/ThemeProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "Takvim",
   description: "Kişisel takvim ve hatırlatma uygulaması",
   manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "Takvim",
-  },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "Takvim" },
 };
 
 export const viewport: Viewport = {
@@ -25,9 +22,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr" className="h-full">
-      <body className={`${inter.className} h-full bg-slate-950 text-slate-100`}>
-        {children}
+    <html lang="tr" className="h-full" suppressHydrationWarning>
+      <body className={`${inter.variable} h-full font-sans`}>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   );
